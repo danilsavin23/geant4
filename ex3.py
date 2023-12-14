@@ -20,24 +20,24 @@ class XXDetectorConstruction(G4VUserDetectorConstruction):
     envelop_z = 20*cm
 
     envelop_mat = nist.FindOrBuildMaterial("G4_AIR")
-
-   
-
+    envelop_mat1 = nist.FindOrBuildMaterial("G4_AIR")
 
     sphere_rad = 7*cm
+    sphere_rad1 = 5*cm
+    sphere_rad2 = 2*cm
     mat = nist.FindOrBuildMaterial("G4_WATER")
-    envelop_mat = nist.FindOrBuildMaterial("G4_AIR")
-    envelop_mat1 = nist.FindOrBuildMaterial("G4_AIR")
+    mat1 = nist.FindOrBuildMaterial("G4_Fe")
+    mat2 = nist.FindOrBuildMaterial("G4_C")
+
 
     checkOverlaps = True
 
-    world_x = 1.2*envelop_x
-    world_y = 1.2*envelop_y
-    world_z = 1.2*envelop_z
+    world_x = 1.4*envelop_x
+    world_y = 1.4*envelop_y
+    world_z = 1.4*envelop_z
 
-
-    sWorld = G4Box("World", 0.7*world_x, 0.7*world_y,
-                   0.7*world_z)
+    sWorld = G4Box("World", 0.5*world_x, 0.5*world_y,
+                   0.5*world_z)
 
     lWorld = G4LogicalVolume(sWorld, envelop_mat, "World")
 
@@ -53,12 +53,21 @@ class XXDetectorConstruction(G4VUserDetectorConstruction):
                            lEnvelop, "Envelop", lWorld, True,
                            0, checkOverlaps)
 
-
-
     sSphere = G4Orb("Head", sphere_rad)
     lSphere = G4LogicalVolume(sSphere, mat, "Head")
     G4PVPlacement(None, G4ThreeVector(), lSphere,
                   "Head", lWorld, True, 0, checkOverlaps)
+
+    sOrb1 = G4Orb("Bullet", sphere_rad1)
+    lOrb1 = G4LogicalVolume(sOrb1, mat1, "Bullet")
+    G4PVPlacement(None, G4ThreeVector(0,0,-0.25*sphere_rad), lOrb1,
+                  "Bullet", lSphere, True, 0, checkOverlaps)
+
+    sOrb2 = G4Orb("Coal", sphere_rad2)
+    lOrb2 = G4LogicalVolume(sOrb2, mat2, "Coal")
+    G4PVPlacement(None, G4ThreeVector(0,0,0.5*sphere_rad), lOrb2,
+                  "Coal", lSphere, True, 0, checkOverlaps)
+
 
     self.fScoringVolume = lSphere
 
